@@ -4,8 +4,9 @@ export const colors = {
     white: '#FFF',
     text: '#120D26',
     gray: {
-        G300: '#3807A7A',
-        GDA: '#DADADA'
+        G300: '#807A7A',
+        GDA: '#DADADA',
+        gray3: '#E4DFDF',
     },
     link: '#5669FF'
 }
