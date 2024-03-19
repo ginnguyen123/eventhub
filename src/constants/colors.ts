@@ -7,6 +7,7 @@ export const colors = {
         G300: '#807A7A',
         GDA: '#DADADA',
         gray3: '#E4DFDF',
+        gray4: '#9D9898',
     },
     link: '#5669FF'
 }
