@@ -33,7 +33,11 @@ const TextComponent = (props: Props) => {
                 color: color ?? colors.text,
                 flex: flex ?? 0,
                 fontSize: size ? size : title ? 24 : 14, //truyen vao size, mac dinh 14, neu truyen vao title thi size = 24
-                fontFamily: fontFamily ? fontFamily : title ? fontFamilies.AirbnbCereal.bold : fontFamilies.AirbnbCereal.regular
+                fontFamily: fontFamily 
+                    ? fontFamily 
+                    : title 
+                    ? fontFamilies.AirbnbCereal.medium 
+                    : fontFamilies.AirbnbCereal.regular
             }, // cac prop style truyen vao de len globalStyles
             styles // styles nguoi dung truyen vao de len cuoi cung
         ]}

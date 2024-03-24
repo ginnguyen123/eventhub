@@ -15,17 +15,31 @@ import { colors } from '../../constants/colors';
 import { fontFamilies } from '../../constants/fontFamilies';
 import SocialLogin from './component/SocialLogin'
 
-const Signup = () => {
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
-    const [isRemember, setIsRemember] = useState<boolean>(false)
+const initValue = {
+    username: '',
+    email: '',
+    password: '',
+    comfirmPassword: ''
+}
+
+const Signup = ({navigation}:any) => {
+    // const [email, setEmail] = useState<string>(email)
+    // const [password, setPassword] = useState<string>(password)
+    const [values, setValues] = useState(initValue)
+
+    const handlerChangeValue = (key: string, value:string) => {
+        const data:any = {...values}
+        data[`${key}`] = value
+        setValues(data)
+    }
 
     return (
         <ContainerComponent
          isImageBackgroud
          isScroll
+         back
         >
-            <SectionComponent styles={{
+            {/* <SectionComponent styles={{
                 justifyContent: 'center',
                 alignItems: 'center', 
                 marginTop: 75
@@ -34,14 +48,14 @@ const Signup = () => {
                     source={require('./../../assets/images/text-logo.png')}
                     style={{width:162, height: 114, marginBottom: 30}}
                 />
-            </SectionComponent>
+            </SectionComponent> */}
             <SectionComponent>
-                <TextComponent text='Sign in' fontFamily={fontFamilies.AirbnbCereal.medium} size={24} />
+                <TextComponent text='Sign up' fontFamily={fontFamilies.AirbnbCereal.medium} size={24} />
                 <Space height={21}/>
                 <InputComponent
-                    value={email} 
-                    onChange={val => setEmail(val)} 
-                    placeholder='Email' 
+                    value={values.username} 
+                    onChange={val => handlerChangeValue('username', val)} 
+                    placeholder='User name' 
                     allowClear
                     affix = {
                         <Sms size={22} color={colors.gray.G300}/>
@@ -50,8 +64,19 @@ const Signup = () => {
             </SectionComponent>
             <SectionComponent>
                 <InputComponent 
-                    value={password} 
-                    onChange={val => setPassword(val)} 
+                    value={values.email} 
+                    onChange={val => handlerChangeValue('email', val)} 
+                    placeholder='Email'
+                    allowClear
+                    affix = {
+                        <Lock size={22} color={colors.gray.G300}/>
+                    }
+                />
+            </SectionComponent>
+            <SectionComponent>
+                <InputComponent 
+                    value={values.password} 
+                    onChange={val => handlerChangeValue('password', val)} 
                     placeholder='Password' 
                     // allowCleard
                     isPassword
@@ -59,7 +84,7 @@ const Signup = () => {
                         <Lock size={22} color={colors.gray.G300}/>
                     }
                 />
-                <RowComponent justify='space-between'>
+                {/* <RowComponent justify='space-between'>
                     <RowComponent onPress={()=> setIsRemember(!isRemember)}>
                         <Switch 
                             trackColor={{true: colors.primary}}
@@ -75,12 +100,24 @@ const Signup = () => {
                         color={colors.text}
                         onPress={() => {}}
                     />
-                </RowComponent>
+                </RowComponent> */}
+            </SectionComponent>
+            <SectionComponent>
+                <InputComponent 
+                    value={values.comfirmPassword} 
+                    onChange={val => handlerChangeValue('comfirmPassword', val)} 
+                    placeholder='Comfirm password' 
+                    // allowCleard
+                    isPassword
+                    affix = {
+                        <Lock size={22} color={colors.gray.G300}/>
+                    }
+                />
             </SectionComponent>
             <Space height={16}/>
             <SectionComponent>
                 <ButtonComponent 
-                    text='SIGIN IN' 
+                    text='SIGIN UP' 
                     type='primary' 
                     color={colors.white} 
                     textStyle={{
@@ -92,9 +129,9 @@ const Signup = () => {
             <SectionComponent>
                 <SocialLogin/>
                 <RowComponent justify='center'>
-                    <TextComponent text="Don't have an account?"/>
+                    <TextComponent text="Do have an account?"/>
                     <Space width={10}/>
-                    <ButtonComponent text="Sign up" type='link' onPress={() => {}}/>
+                    <ButtonComponent text="Sign in" type='link' onPress={() => navigation.navigate('LoginScreen')}/>
                 </RowComponent>
             </SectionComponent>
         </ContainerComponent>

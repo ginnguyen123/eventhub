@@ -5,6 +5,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import MainNavigator from "./src/navigators/MainNavigator";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 const App = () => {
   // App la noi dieu huong cac man hinh
@@ -41,11 +43,13 @@ const App = () => {
       isSplash ? (
         <SplashScreen />
       ) : (
-        <NavigationContainer>
-          {
-            assetToken ? <MainNavigator /> : <AuthNavigator />
-          }
-        </NavigationContainer>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <NavigationContainer>
+            {
+              assetToken ? <MainNavigator /> : <AuthNavigator />
+            }
+          </NavigationContainer>
+        </GestureHandlerRootView>
       )
     }
   </>
