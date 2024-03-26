@@ -73,12 +73,12 @@ const LoginScreen = ({navigation}: any) => {
                         type='text' 
                         text='Forgot password?' 
                         color={colors.text}
-                        onPress={() => {}}
+                        onPress={() => navigation.navigate('ForgotPassword')}
                     />
                 </RowComponent>
             </SectionComponent>
             <Space height={16}/>
-            <SectionComponent>
+            <SectionComponent styles={{alignItems: 'center'}}>
                 <ButtonComponent 
                     text='SIGIN IN' 
                     type='primary' 

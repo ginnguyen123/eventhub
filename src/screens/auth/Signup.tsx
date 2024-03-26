@@ -115,7 +115,7 @@ const Signup = ({navigation}:any) => {
                 />
             </SectionComponent>
             <Space height={16}/>
-            <SectionComponent>
+            <SectionComponent styles={{alignItems: 'center'}}>
                 <ButtonComponent 
                     text='SIGIN UP' 
                     type='primary' 

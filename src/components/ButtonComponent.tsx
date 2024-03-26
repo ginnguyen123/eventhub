@@ -44,15 +44,17 @@ const ButtonComponent = (props: Props) => {
                 globalStyles.shadow,
                 {
                     backgroundColor: 
-                    background ?? colors.primary
+                    background ?? colors.primary,
+                    width: '80%'
                 }, 
                 styles]}>
-                { icon && icon }
+                { icon && icon && iconFlex === 'left' }
                 <TextComponent 
                     text = {text} 
                     color = {color ?? colors.text} 
                     styles={[textStyle,{
-                        marginLeft: icon ? 12 : 0 
+                        marginLeft: icon ? 12 : 0,
+                        textAlign: 'center'
                     }]}
                     flex={icon && iconFlex === 'right' ? 1 : 0}
                     fontFamily={textFont ?? fontFamilies.AirbnbCereal.regular}

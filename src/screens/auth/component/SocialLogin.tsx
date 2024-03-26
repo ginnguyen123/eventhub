@@ -15,7 +15,7 @@ import { Facebook, Google } from '../../../assets/svgs';
 
 const SocialLogin = () => {
     return (
-        <SectionComponent>
+        <SectionComponent styles={{alignItems: 'center'}}>
             <Space height={30}/>
             <TextComponent 
                 styles={{textAlign: 'center'}}
