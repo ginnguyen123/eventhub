@@ -9,11 +9,14 @@ import {
     RowComponent
 } from '../../components';
 import {globalStyles} from '../../styles/globalStyles'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {Lock, Sms} from 'iconsax-react-native'
 import { colors } from '../../constants/colors';
 import { fontFamilies } from '../../constants/fontFamilies';
 import SocialLogin from './component/SocialLogin'
+import { LoadingModal } from '../../modals';
+import authenticationAPI from '../../apis/authApi';
+import { Validate } from '../../utils/validate';
 
 const initValue = {
     username: '',
@@ -23,15 +26,56 @@ const initValue = {
 }
 
 const Signup = ({navigation}:any) => {
-    // const [email, setEmail] = useState<string>(email)
-    // const [password, setPassword] = useState<string>(password)
     const [values, setValues] = useState(initValue)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [errorMes, setErrorMes] = useState<string>('')
 
     const handlerChangeValue = (key: string, value:string) => {
         const data:any = {...values}
         data[`${key}`] = value
         setValues(data)
     }
+
+    const handleRegister = async () => {
+        let {username, password, comfirmPassword, email} = values
+
+        if(!Validate.Email(email) && email){
+            setErrorMes('Email không đúng định dạng!')
+            return
+        }
+
+        
+        if(username && password && comfirmPassword && email){
+            setIsLoading(true)
+            try {
+                const res = await authenticationAPI.HandleAuthentication(
+                    '/register',
+                    {
+                        username,
+                        email,
+                        password
+                    },
+                    'POST'
+                )
+                console.log(res);
+                setIsLoading(false)
+            } catch (error) {
+                console.log(error);
+                setIsLoading(false)
+            }
+        }
+        else{
+            setErrorMes('Vui lòng nhập đầy đủ thông tin!')
+        }
+    }
+
+    useEffect(()=>{
+        let {username, password, comfirmPassword, email} = values
+        if(username || password || comfirmPassword || email) {
+            setErrorMes('')
+        }
+
+    }, [values.email, values.comfirmPassword, values.password, values.username])
 
     return (
         <ContainerComponent
@@ -114,6 +158,12 @@ const Signup = ({navigation}:any) => {
                     }
                 />
             </SectionComponent>
+            {
+                errorMes && 
+                <SectionComponent>
+                    <TextComponent text={errorMes} color={colors.dangers}/>
+                </SectionComponent>
+            }
             <Space height={16}/>
             <SectionComponent styles={{alignItems: 'center'}}>
                 <ButtonComponent 
@@ -124,6 +174,7 @@ const Signup = ({navigation}:any) => {
                         fontFamily: fontFamilies.AirbnbCereal.medium,
                         fontSize: 16
                     }}
+                    onPress={() => handleRegister()}
                 />
             </SectionComponent>
             <SectionComponent>
@@ -134,6 +185,7 @@ const Signup = ({navigation}:any) => {
                     <ButtonComponent text="Sign in" type='link' onPress={() => navigation.navigate('LoginScreen')}/>
                 </RowComponent>
             </SectionComponent>
+            <LoadingModal visiable={isLoading}/>
         </ContainerComponent>
     );
 }

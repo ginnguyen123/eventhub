@@ -8,17 +8,30 @@ import {
     Space,
     RowComponent
 } from '../../components';
-import {globalStyles} from '../../styles/globalStyles'
 import { useState } from 'react';
 import {Lock, Sms} from 'iconsax-react-native'
 import { colors } from '../../constants/colors';
 import { fontFamilies } from '../../constants/fontFamilies';
 import SocialLogin from './component/SocialLogin'
+import authenticationAPI from '../../apis/authApi';
+
+const DOMAIN = 'http://192.168.1.19'
+const PORT = '3001'
+const URL = `${DOMAIN}:${PORT}`
 
 const LoginScreen = ({navigation}: any) => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [isRemember, setIsRemember] = useState<boolean>(false)
+
+    const handleLogin = async () => {
+        try{
+            let res = await authenticationAPI.HandleAuthentication('/hello')
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
 
     return (
         <ContainerComponent
@@ -53,7 +66,7 @@ const LoginScreen = ({navigation}: any) => {
                     value={password} 
                     onChange={val => setPassword(val)} 
                     placeholder='Password' 
-                    // allowCleard
+                    allowClear
                     isPassword
                     affix = {
                         <Lock size={22} color={colors.gray.G300}/>
@@ -87,6 +100,7 @@ const LoginScreen = ({navigation}: any) => {
                         fontFamily: fontFamilies.AirbnbCereal.medium,
                         fontSize: 16
                     }}
+                    onPress={() => handleLogin()}
                 />
             </SectionComponent>
             <SectionComponent>

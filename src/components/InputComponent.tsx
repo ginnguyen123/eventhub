@@ -44,6 +44,7 @@ const InputComponent = (props: Props) => {
                 style={[styles.input, globalStyles.text]}
                 placeholderTextColor={'#747688'}
                 keyboardType={type ?? 'default'} 
+                autoCapitalize="none" //tắt tự đông viết hoa
             />
             {suffix ?? suffix}
             <TouchableOpacity

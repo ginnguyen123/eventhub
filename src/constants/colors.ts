@@ -9,5 +9,6 @@ export const colors = {
         gray3: '#E4DFDF',
         gray4: '#9D9898',
     },
-    link: '#5669FF'
+    link: '#5669FF',
+    dangers: '#e74c3c'
 }
