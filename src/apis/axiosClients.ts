@@ -23,7 +23,7 @@ axiosClient.interceptors.request.use( async (config:any) => {
 
 // sử dụng interceptors để customer các response => nơi check các mã lỗi
 axiosClient.interceptors.response.use(response => {
-    if(response.status === 200)
+    if(response.status === 200 || response.status === 201)
         return response.data
 
     // be trả lỗi về
