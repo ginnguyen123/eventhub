@@ -1,4 +1,4 @@
-import {View, Text, Image, Switch} from 'react-native'
+import {View, Text, Image, Switch, Alert} from 'react-native'
 import { 
     ButtonComponent, 
     InputComponent, 
@@ -14,19 +14,36 @@ import { colors } from '../../constants/colors';
 import { fontFamilies } from '../../constants/fontFamilies';
 import SocialLogin from './component/SocialLogin'
 import authenticationAPI from '../../apis/authApi';
+import { useDispatch } from 'react-redux';
+import { addAuth } from '../../stores/reducers/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DOMAIN = 'http://192.168.1.19'
 const PORT = '3001'
 const URL = `${DOMAIN}:${PORT}`
 
 const LoginScreen = ({navigation}: any) => {
-    const [email, setEmail] = useState<string>('')
+    const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [isRemember, setIsRemember] = useState<boolean>(false)
+    const dispatch = useDispatch()
 
     const handleLogin = async () => {
+        if(!username && !password){
+            return Alert.alert('Vui lòng nhập đầy đủ thông tin!')
+        }
         try{
-            let res = await authenticationAPI.HandleAuthentication('/hello')
+            let res = await authenticationAPI.HandleAuthentication(
+                '/login', 
+                {username, password}, 
+                'POST'
+            )
+            dispatch(addAuth(res.data))
+            await AsyncStorage.setItem(
+                'auth', 
+                isRemember ? JSON.stringify(res.data) : username
+            )
+            
         }
         catch(error){
             console.log(error);
@@ -52,8 +69,8 @@ const LoginScreen = ({navigation}: any) => {
                 <TextComponent text='Sign in' fontFamily={fontFamilies.AirbnbCereal.medium} size={24} />
                 <Space height={21}/>
                 <InputComponent
-                    value={email} 
-                    onChange={val => setEmail(val)} 
+                    value={username} 
+                    onChange={val => setUsername(val)} 
                     placeholder='Email' 
                     allowClear
                     affix = {
@@ -80,6 +97,7 @@ const LoginScreen = ({navigation}: any) => {
                             value={isRemember} 
                             onChange={() => setIsRemember(!isRemember)}
                         />
+                        <Space width={5}/>
                         <TextComponent text={'Remember me'}/>
                     </RowComponent>
                     <ButtonComponent 

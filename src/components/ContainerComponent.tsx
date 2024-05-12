@@ -68,7 +68,11 @@ const ContainerComponent = (props: Props) => {
 
     const returnContainer = isScroll ? (
         // globalStyles.container có flex = 1 => ăn hết height + width màn hình / nhưng có backgroud = white => bị đè hình
-        <ScrollView style={[{flex: 1}]}>
+        <ScrollView 
+            style={[{flex: 1}]}
+            // tắt thanh Indicator
+            showsVerticalScrollIndicator={false}
+        >
             {children}
         </ScrollView>
     ) : (

@@ -17,6 +17,16 @@ import SocialLogin from './component/SocialLogin'
 import { LoadingModal } from '../../modals';
 import authenticationAPI from '../../apis/authApi';
 import { Validate } from '../../utils/validate';
+import { useDispatch } from 'react-redux';
+import { addAuth } from '../../stores/reducers/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+interface ErrorMessages {
+    username: string,
+    email: string,
+    password: string,
+    comfirmPassword: string
+}
 
 const initValue = {
     username: '',
@@ -28,7 +38,45 @@ const initValue = {
 const Signup = ({navigation}:any) => {
     const [values, setValues] = useState(initValue)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [errorMes, setErrorMes] = useState<string>('')
+    const [errorMes, setErrorMes] = useState<any>()
+    const distPatch = useDispatch()
+    const [isDisable, setIsDisable] = useState<boolean>(true)
+
+    const formValidator = (key:string) => {
+        let data = {...errorMes}
+        let message:string = ''
+        
+        switch (key) {
+            case 'email': 
+                if(!values.email){
+                    message = 'Email is required!'
+                }
+                else if(!Validate.Email(values.email)){
+                    message = 'Email is not valited!'
+                }
+                else {
+                    message = ''
+                }
+                break;
+            case 'password':
+                message = !values.password ? 'Password is required!' : ''
+                break;
+            case 'comfirmPassword':
+                message = !values.comfirmPassword ? 'Comfirm password is required!' 
+                : values.comfirmPassword !== values.password ? 'Password is not match!' : ''
+                break;
+            case 'username':
+                if(!values.username){
+                    message = 'Username is required!'
+                }
+                else {
+                    message = ''
+                }
+                break
+        }
+        data[`${key}`] = message
+        setErrorMes(data)
+    }
 
     const handlerChangeValue = (key: string, value:string) => {
         const data:any = {...values}
@@ -37,35 +85,11 @@ const Signup = ({navigation}:any) => {
     }
 
     const handleRegister = async () => {
-        let {username, password, comfirmPassword, email} = values
-
-        if(!Validate.Email(email) && email){
-            setErrorMes('Email không đúng định dạng!')
-            return
-        }
-
-        
-        if(username && password && comfirmPassword && email){
-            setIsLoading(true)
-            try {
-                const res = await authenticationAPI.HandleAuthentication(
-                    '/register',
-                    {
-                        username,
-                        email,
-                        password
-                    },
-                    'POST'
-                )
-                console.log(res);
-                setIsLoading(false)
-            } catch (error) {
-                console.log(error);
-                setIsLoading(false)
-            }
-        }
-        else{
-            setErrorMes('Vui lòng nhập đầy đủ thông tin!')
+        let api = '/verification'
+        try{
+            let res = await auth
+        }catch(error){
+            console.log(error);
         }
     }
 
@@ -76,6 +100,18 @@ const Signup = ({navigation}:any) => {
         }
 
     }, [values.email, values.comfirmPassword, values.password, values.username])
+
+    useEffect(()=>{
+        if(!errorMes || 
+            (errorMes && (errorMes.email || errorMes.comfirmPassword 
+            || errorMes.password || errorMes.username))){
+                setIsDisable(true)
+            }
+        else{
+            setIsDisable(false)
+        }
+
+    },[errorMes])
 
     return (
         <ContainerComponent
@@ -104,17 +140,19 @@ const Signup = ({navigation}:any) => {
                     affix = {
                         <Sms size={22} color={colors.gray.G300}/>
                     }
+                    onEnd={() => formValidator('username')} 
                 />
             </SectionComponent>
             <SectionComponent>
                 <InputComponent 
                     value={values.email} 
                     onChange={val => handlerChangeValue('email', val)} 
-                    placeholder='Email'
+                    placeholder='abc@gmail.com'
                     allowClear
                     affix = {
                         <Lock size={22} color={colors.gray.G300}/>
                     }
+                    onEnd={() => formValidator('email')} 
                 />
             </SectionComponent>
             <SectionComponent>
@@ -127,6 +165,7 @@ const Signup = ({navigation}:any) => {
                     affix = {
                         <Lock size={22} color={colors.gray.G300}/>
                     }
+                    onEnd={() => formValidator('password')}
                 />
                 {/* <RowComponent justify='space-between'>
                     <RowComponent onPress={()=> setIsRemember(!isRemember)}>
@@ -156,12 +195,23 @@ const Signup = ({navigation}:any) => {
                     affix = {
                         <Lock size={22} color={colors.gray.G300}/>
                     }
+                    onEnd={() => formValidator('comfirmPassword')}
                 />
             </SectionComponent>
             {
                 errorMes && 
                 <SectionComponent>
-                    <TextComponent text={errorMes} color={colors.dangers}/>
+                    {
+                      Object.keys(errorMes).map((error, index) => 
+                        errorMes[`${error}`] && (
+                        <TextComponent 
+                            text={errorMes[`${error}`]} 
+                            key={index}
+                            color={colors.dangers}
+                        />
+                      ))  
+                    }
+                    
                 </SectionComponent>
             }
             <Space height={16}/>
@@ -175,6 +225,7 @@ const Signup = ({navigation}:any) => {
                         fontSize: 16
                     }}
                     onPress={() => handleRegister()}
+                    disable={isDisable}
                 />
             </SectionComponent>
             <SectionComponent>
