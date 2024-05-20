@@ -3,6 +3,18 @@ const bcryp = require('bcrypt')
 const asyncHandle = require('express-async-handler')
 const jwt = require('jsonwebtoken')
 const respCode = require('./../common/respCode')
+const nodemailer = require('nodemailer')
+require('dotenv').config()
+
+const tranforter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // Use `true` for port 587, `false` for all other ports
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+})
 
 const genJwt = async (strPayload) =>{
     let token = await jwt.sign({ strPayload }, process.env.SECURITY_SIGNATURE, {
@@ -11,14 +23,26 @@ const genJwt = async (strPayload) =>{
     return token
 }
 
-const handleSendMail= async (value) => {
-    // value kiểu string
+const handleSendMail= async (value, email) => {
+    try{
+        await tranforter.sendMail({
+            from: `Support EvenHub 👻 <${process.env.EMAIL}>`, // sender address
+            to: `${email}`, // list of receivers
+            subject: "Verification - EvenHub", // Subject line
+            text: "Your code verification email:", // plain text body
+            html: "<h1>Hello world?</1>", // html body
+        });
+    }
+    catch(error){
+        console.log('=====> Can not send email!');
+        console.log('=====> Cause: ' + error);
+    }
 }
 
 // có sử lý với fe nên sử dụng asyncHandle
 const verification = asyncHandle (async(req, res) => {
     let {email} = req.body
-    console.log(email);
+    await handleSendMail('',email)
     res.send('verification')
 })
 
