@@ -86,8 +86,11 @@ const Signup = ({navigation}:any) => {
 
     const handleRegister = async () => {
         let api = '/verification'
+                
         try{
-            let res = await auth
+            let res = await authenticationAPI.HandleAuthentication(api, {email: values.email}, 'POST')
+            console.log(res);
+            
         }catch(error){
             console.log(error);
         }
