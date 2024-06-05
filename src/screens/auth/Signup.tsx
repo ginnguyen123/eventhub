@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import {Lock, Sms} from 'iconsax-react-native'
 import { colors } from '../../constants/colors';
 import { fontFamilies } from '../../constants/fontFamilies';
-import SocialLogin from './component/SocialLogin'
+import SocialLogin from './components/SocialLogin'
 import { LoadingModal } from '../../modals';
 import authenticationAPI from '../../apis/authApi';
 import { Validate } from '../../utils/validate';
@@ -85,14 +85,20 @@ const Signup = ({navigation}:any) => {
     }
 
     const handleRegister = async () => {
-        let api = '/verification'
-                
+        let api = '/verification'    
+        setIsLoading(true)            
         try{
             let res = await authenticationAPI.HandleAuthentication(api, {email: values.email}, 'POST')
-            console.log(res);
-            
+            navigation.navigate('Verification', {
+                code: res.data.code,
+                username: values.username,
+                email: values.email,
+                password: values.password
+            })
+            setIsLoading(false)
         }catch(error){
             console.log(error);
+            setIsLoading(false)
         }
     }
 

@@ -12,7 +12,7 @@ import { useState } from 'react';
 import {Lock, Sms} from 'iconsax-react-native'
 import { colors } from '../../constants/colors';
 import { fontFamilies } from '../../constants/fontFamilies';
-import SocialLogin from './component/SocialLogin'
+import SocialLogin from './components/SocialLogin'
 import authenticationAPI from '../../apis/authApi';
 import { useDispatch } from 'react-redux';
 import { addAuth } from '../../stores/reducers/authReducer';

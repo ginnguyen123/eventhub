@@ -1,6 +1,6 @@
 import { Dimensions } from "react-native";
 
-const DOMAIN = 'http://192.168.1.18'
+const DOMAIN = 'http://192.168.1.15'
 
 const PORT = '3001'
 

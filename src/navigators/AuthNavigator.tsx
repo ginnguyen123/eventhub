@@ -3,7 +3,7 @@ import {
     LoginScreen, 
     Signup, 
     ForgotPassword, 
-    Verication 
+    Verification 
 } from "../screens";
 import OnbroadingScreen from './../screens/auth/OnbroadingScreen'
 import { useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const AuthNavigator = () => {
             <Stack.Screen name='LoginScreen' component={LoginScreen}/>
             <Stack.Screen name='Signup' component={Signup}/>
             <Stack.Screen name='ForgotPassword' component={ForgotPassword}/>
-            <Stack.Screen name='Verication' component={Verication}/>
+            <Stack.Screen name='Verification' component={Verification}/>
         </Stack.Navigator>
     );
 }

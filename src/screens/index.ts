@@ -3,7 +3,7 @@ import LoginScreen from './auth/LoginScreen';
 import SplashScreen from './SplashScreen';
 import Signup from './auth/Signup';
 import ForgotPassword from './auth/ForgotPassword';
-import Verication from './auth/Verication';
+import Verification from './auth/Verification';
 
 export {
     HomeScreen,
@@ -11,5 +11,5 @@ export {
     SplashScreen,
     Signup,
     ForgotPassword,
-    Verication
+    Verification
 }
