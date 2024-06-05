@@ -9,7 +9,7 @@ require('dotenv').config()
 const tranforter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
-    secure: false, // Use `true` for port 587, `false` for all other ports
+    secure: false,
     auth: {
       user: process.env.EMAIL,
       pass: process.env.EMAIL_PASSWORD,
@@ -27,23 +27,39 @@ const handleSendMail= async (value, email) => {
     try{
         await tranforter.sendMail({
             from: `Support EvenHub 👻 <${process.env.EMAIL}>`, // sender address
-            to: `${email}`, // list of receivers
-            subject: "Verification - EvenHub", // Subject line
-            text: "Your code verification email:", // plain text body
-            html: "<h1>Hello world?</1>", // html body
+            to: `${email}`,
+            subject: "Verification - EvenHub",
+            text: "Your code verification email:", 
+            html: `<h1>${value}</1>`, 
         });
+        return
     }
     catch(error){
         console.log('=====> Can not send email!');
         console.log('=====> Cause: ' + error);
+        return error
     }
 }
 
 // có sử lý với fe nên sử dụng asyncHandle
 const verification = asyncHandle (async(req, res) => {
     let {email} = req.body
-    await handleSendMail('',email)
-    res.send('verification')
+    let verificationCode = Math.round(1000 + Math.random()*9000)
+    try{
+        await handleSendMail(verificationCode,email)
+        res.status(200).json({
+            message: 'Send verificaton code successfully!',
+            data: {
+                code: verificationCode
+            }
+        })
+    }
+    catch(error){
+        console.log(error);
+        res.status(401)
+        throw new Error('Can not send email.')
+    }
+    
 })
 
 const register = asyncHandle(async (req, res) => {
